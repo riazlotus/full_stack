@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Lotus Design | Graphic Design Services in Jamalpur</title>
+<meta name="description" content="Lotus Design offers logo, business card, banner, poster & social media design services in Jamalpur, Bangladesh.">
+<link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&family=Hind+Siliguri:wght@400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+
+<!-- NAVBAR -->
+<header class="navbar">
+  <div class="container nav-inner">
+    <a href="#" class="logo">🌸 Lotus <span>Design</span></a>
+    <nav class="nav-links" id="navLinks">
+      <a href="#home">Home</a>
+      <a href="#services">Services</a>
+      <a href="#about">About</a>
+      <a href="#contact">Contact</a>
+    </nav>
+    <a href="https://wa.me/{{ business.whatsapp_link_number }}" target="_blank" class="btn btn-whatsapp nav-cta">WhatsApp Us</a>
+    <button class="hamburger" id="hamburger" aria-label="Menu">☰</button>
+  </div>
+</header>
+
+<!-- HERO -->
+<section class="hero" id="home">
+  <div class="container hero-inner">
+    <div class="hero-text">
+      <span class="tag">Graphic Design Studio</span>
+      <h1>Designs that make your brand <span>stand out</span></h1>
+      <p>Lotus Design creates logos, business cards, banners, posters & social media graphics that help small businesses in Jamalpur and beyond look professional and get noticed.</p>
+      <div class="hero-btns">
+        <a href="#contact" class="btn btn-primary">Order Now</a>
+        <a href="#services" class="btn btn-outline">View Services</a>
+      </div>
+    </div>
+    <div class="hero-visual">
+      <svg viewBox="0 0 400 400" xmlns="http://www.w3.org/2000/svg">
+        <circle cx="200" cy="200" r="170" fill="var(--accent-light)"/>
+        <rect x="90" y="120" width="220" height="160" rx="16" fill="var(--card-bg)" stroke="var(--accent)" stroke-width="3"/>
+        <circle cx="140" cy="170" r="22" fill="var(--accent)"/>
+        <rect x="180" y="155" width="100" height="12" rx="6" fill="var(--accent)"/>
+        <rect x="180" y="180" width="70" height="10" rx="5" fill="var(--accent-light)"/>
+        <rect x="110" y="225" width="180" height="10" rx="5" fill="var(--accent-light)"/>
+        <rect x="110" y="245" width="140" height="10" rx="5" fill="var(--accent-light)"/>
+        <path d="M200 60 L215 95 L253 100 L225 125 L233 163 L200 143 L167 163 L175 125 L147 100 L185 95 Z" fill="var(--accent)"/>
+      </svg>
+    </div>
+  </div>
+</section>
+
+<!-- SERVICES -->
+<section class="services" id="services">
+  <div class="container">
+    <h2 class="section-title">Our Services</h2>
+    <p class="section-subtitle">Simple pricing. Fast delivery. Designs you'll love.</p>
+    <div class="services-grid">
+      {% for s in services %}
+      <div class="service-card">
+        <div class="service-icon">{{ s.icon }}</div>
+        <h3>{{ s.name }}</h3>
+        <p>{{ s.description }}</p>
+        <div class="service-price">{{ s.price }}</div>
+        <a href="#contact" class="btn btn-outline service-btn" onclick="preselectService('{{ s.name }}')">Order This</a>
+      </div>
+      {% endfor %}
+    </div>
+  </div>
+</section>
+
+<!-- ABOUT -->
+<section class="about" id="about">
+  <div class="container about-inner">
+    <div class="about-visual">
+      <svg viewBox="0 0 300 300" xmlns="http://www.w3.org/2000/svg">
+        <rect x="20" y="20" width="260" height="260" rx="20" fill="var(--accent-light)"/>
+        <circle cx="150" cy="120" r="55" fill="var(--accent)"/>
+        <rect x="90" y="200" width="120" height="16" rx="8" fill="var(--card-bg)"/>
+        <rect x="110" y="230" width="80" height="12" rx="6" fill="var(--card-bg)"/>
+      </svg>
+    </div>
+    <div class="about-text">
+      <span class="tag">About Us</span>
+      <h2>We help brands look their best</h2>
+      <p>Lotus Design is a graphic design studio based in Mainpur, Jamalpur, Bangladesh. We specialize in creating clean, professional visual identities for small businesses, shops, and individuals — from logos to complete social media design packages.</p>
+      <ul class="about-list">
+        <li>✔ Affordable pricing for local businesses</li>
+        <li>✔ Fast turnaround, usually 1-3 days</li>
+        <li>✔ Unlimited revisions until you're happy</li>
+        <li>✔ Order & communicate directly on WhatsApp</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<!-- CONTACT / ORDER -->
+<section class="contact" id="contact">
+  <div class="container">
+    <h2 class="section-title">Start Your Order</h2>
+    <p class="section-subtitle">Fill the form below — we'll open WhatsApp so you can send it directly to us.</p>
+
+    {% with messages = get_flashed_messages(with_categories=true) %}
+      {% if messages %}
+        <div class="flash-messages">
+        {% for category, msg in messages %}
+          <div class="flash flash-{{ category }}">{{ msg }}</div>
+        {% endfor %}
+        </div>
+      {% endif %}
+    {% endwith %}
+
+    <div class="contact-grid">
+      <form class="order-form" action="{{ url_for('place_order') }}" method="POST">
+        <div class="form-row">
+          <div class="form-group">
+            <label for="name">Full Name *</label>
+            <input type="text" id="name" name="name" required>
+          </div>
+          <div class="form-group">
+            <label for="phone">Phone Number *</label>
+            <input type="tel" id="phone" name="phone" required>
+          </div>
+        </div>
+        <div class="form-group">
+          <label for="email">Email (optional)</label>
+          <input type="email" id="email" name="email">
+        </div>
+        <div class="form-group">
+          <label for="service">Select Service *</label>
+          <select id="service" name="service" required>
+            <option value="">-- Choose a service --</option>
+            {% for s in services %}
+            <option value="{{ s.name }}">{{ s.name }}</option>
+            {% endfor %}
+            <option value="Other">Other</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label for="message">Project Details</label>
+          <textarea id="message" name="message" rows="4" placeholder="Tell us about your project..."></textarea>
+        </div>
+        <button type="submit" class="btn btn-primary btn-full">Send Order via WhatsApp</button>
+      </form>
+
+      <div class="contact-info">
+        <div class="info-card">
+          <h3>📍 Address</h3>
+          <p>{{ business.address }}</p>
+        </div>
+        <div class="info-card">
+          <h3>📞 Phone / WhatsApp</h3>
+          <p><a href="tel:{{ business.phone }}">{{ business.phone }}</a></p>
+        </div>
+        <div class="info-card">
+          <h3>✉️ Email</h3>
+          <p><a href="mailto:{{ business.email }}">{{ business.email }}</a></p>
+        </div>
+        <a href="https://wa.me/{{ business.whatsapp_link_number }}" target="_blank" class="btn btn-whatsapp btn-full">Chat on WhatsApp</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer class="footer">
+  <div class="container footer-inner">
+    <div class="logo">🌸 Lotus <span>Design</span></div>
+    <p>{{ business.address }} · {{ business.phone }} · {{ business.email }}</p>
+    <p class="copyright">© {{ 2026 }} Lotus Design. All rights reserved.</p>
+  </div>
+</footer>
+
+<script src="{{ url_for('static', filename='js/script.js') }}"></script>
+</body>
+</html>

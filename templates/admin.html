@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Admin Dashboard | Lotus Design</title>
+<link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+</head>
+<body class="admin-body">
+
+<header class="navbar">
+  <div class="container nav-inner">
+    <a href="{{ url_for('admin_dashboard') }}" class="logo">🌸 Lotus <span>Design</span> Admin</a>
+    <a href="{{ url_for('admin_logout') }}" class="btn btn-outline">Logout</a>
+  </div>
+</header>
+
+<div class="container admin-wrap">
+  <h1>Order Dashboard</h1>
+
+  <div class="stats-row">
+    <div class="stat-card">
+      <div class="stat-num">{{ total }}</div>
+      <div class="stat-label">Total Orders</div>
+    </div>
+    <div class="stat-card highlight">
+      <div class="stat-num">{{ new_count }}</div>
+      <div class="stat-label">New Orders</div>
+    </div>
+  </div>
+
+  <div class="table-wrap">
+    <table class="orders-table">
+      <thead>
+        <tr>
+          <th>#</th>
+          <th>Name</th>
+          <th>Phone</th>
+          <th>Email</th>
+          <th>Service</th>
+          <th>Message</th>
+          <th>Date</th>
+          <th>Status</th>
+          <th>Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for o in orders %}
+        <tr>
+          <td>{{ o.id }}</td>
+          <td>{{ o.name }}</td>
+          <td><a href="https://wa.me/{{ o.phone }}" target="_blank">{{ o.phone }}</a></td>
+          <td>{{ o.email or '-' }}</td>
+          <td>{{ o.service }}</td>
+          <td class="msg-cell">{{ o.message or '-' }}</td>
+          <td>{{ o.created_at.strftime("%d %b %Y, %I:%M %p") }}</td>
+          <td>
+            <span class="status-badge status-{{ o.status|lower|replace(' ', '-') }}">{{ o.status }}</span>
+          </td>
+          <td class="actions-cell">
+            <form action="{{ url_for('update_order_status', order_id=o.id) }}" method="POST" class="inline-form">
+              <select name="status" onchange="this.form.submit()">
+                <option value="New" {% if o.status=='New' %}selected{% endif %}>New</option>
+                <option value="In Progress" {% if o.status=='In Progress' %}selected{% endif %}>In Progress</option>
+                <option value="Completed" {% if o.status=='Completed' %}selected{% endif %}>Completed</option>
+              </select>
+            </form>
+            <form action="{{ url_for('delete_order', order_id=o.id) }}" method="POST" class="inline-form" onsubmit="return confirm('Delete this order?');">
+              <button type="submit" class="btn-delete">Delete</button>
+            </form>
+          </td>
+        </tr>
+        {% else %}
+        <tr>
+          <td colspan="9" class="empty-row">No orders yet.</td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+</div>
+
+</body>
+</html>
