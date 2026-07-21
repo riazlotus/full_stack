@@ -187,8 +187,15 @@ def delete_order(order_id):
     return redirect(url_for('admin_dashboard'))
 
 
-# ---------------- MAIN ----------------
+# ---------------- DATABASE INIT ----------------
+# This runs whether the app is started directly (python app.py) OR
+# imported by a WSGI server like gunicorn (gunicorn app:app), which is
+# how Render runs it. Without this at module level, gunicorn never
+# creates the database tables and every /order or /admin DB call fails
+# with an Internal Server Error.
+with app.app_context():
+    db.create_all()
+
+# ---------------- MAIN (only used for local development) ----------------
 if __name__ == '__main__':
-    with app.app_context():
-        db.create_all()
     app.run(debug=True, host='0.0.0.0', port=5000)
